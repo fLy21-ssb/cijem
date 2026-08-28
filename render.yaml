@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: cijem-backend
+    runtime: node
+    rootDir: cijem-backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: ALERTA_EMAIL_DESTINO
+        sync: false
+      - key: ALERTA_CRON
+        value: "0 8 * * *"
+
+  - type: web
+    name: cijem-frontend
+    runtime: static
+    rootDir: cijem-frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
