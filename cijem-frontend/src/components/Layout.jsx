@@ -1,16 +1,16 @@
 import { Outlet } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import Topbar from './Topbar';
+import ExpedienteTabs from './ExpedienteTabs';
+import Cabecera from './Cabecera';
 
 const Layout = () => (
-  <div className="app-layout">
-    <Sidebar />
-    <main className="main-area">
-      <Topbar />
-      <div className="content-wrapper">
+  <div className="expediente-shell">
+    <ExpedienteTabs />
+    <div className="expediente-page">
+      <Cabecera />
+      <div className="expediente-body">
         <Outlet />
       </div>
-    </main>
+    </div>
   </div>
 );
 

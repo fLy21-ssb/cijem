@@ -1,10 +1,27 @@
 import { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { api } from '../api/client';
 import EmptyState from '../components/EmptyState';
 
 const COLOR_ESTADO = { Verde: '#3C6E47', Amarillo: '#A9720F', Rojo: '#A6362B' };
 const TICK_MONO = { fontSize: 11, fontFamily: 'IBM Plex Mono, monospace', fill: '#4A5568' };
+const fechaHoy = new Date().toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+const ReglaAvance = ({ valor }) => {
+  const marcas = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+  return (
+    <div className="regla-avance">
+      <div className="regla-track">
+        <div className="regla-base" />
+        <div className="regla-fill" style={{ width: `${valor}%` }} />
+        {marcas.map((m) => (
+          <div key={m} className={`regla-tick ${m % 50 === 0 ? 'mayor' : ''}`} style={{ left: `${m}%` }} />
+        ))}
+        <div className="regla-marcador" style={{ left: `${valor}%` }}>{valor}%</div>
+      </div>
+    </div>
+  );
+};
 
 const Inicio = () => {
   const [resumen, setResumen] = useState(null);
@@ -35,11 +52,6 @@ const Inicio = () => {
     );
   }
 
-  const datosDonut = [
-    { name: 'Cumplido', value: resumen.avanceGlobal, fill: '#3B5978' },
-    { name: 'Pendiente', value: Math.max(0, 100 - resumen.avanceGlobal), fill: '#DDD7C4' },
-  ];
-
   const datosGrafico = resumen.masAtrasados.map((ind) => ({
     nombre: ind.codigo_interno,
     avance: ind.porcentaje_cumplimiento,
@@ -50,41 +62,30 @@ const Inicio = () => {
     <>
       <h2 className="page-title">Panel de Control Regional</h2>
 
-      <div className="dashboard-grid">
-        <div className="card stat-card donut-card">
-          <h3>Avance Global</h3>
-          <div style={{ width: '100%', height: 140, position: 'relative' }}>
-            <ResponsiveContainer>
-              <PieChart>
-                <Pie data={datosDonut} dataKey="value" innerRadius={45} outerRadius={65} startAngle={90} endAngle={-270}>
-                  {datosDonut.map((entry, i) => (
-                    <Cell key={i} fill={entry.fill} stroke="none" />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span className="donut-center-label">{resumen.avanceGlobal}%</span>
-            </div>
+      <div className="hoja-registro">
+        <div className="hoja-registro-header">
+          <span>Registro de Avance — Periodo 2026</span>
+          <span className="num-registro">Actualizado {fechaHoy}</span>
+        </div>
+        <div className="campos-registro">
+          <div className="campo-registro" style={{ gridColumn: 'span 2' }}>
+            <div className="campo-etiqueta">Avance global</div>
+            <ReglaAvance valor={resumen.avanceGlobal} />
+          </div>
+          <div className="campo-registro">
+            <div className="campo-etiqueta">Total indicadores</div>
+            <div className="campo-valor">{resumen.totalIndicadores}</div>
+          </div>
+          <div className="campo-registro">
+            <div className="campo-etiqueta">En alerta</div>
+            <div className={`campo-valor ${resumen.totalAlertas > 0 ? 'alerta' : ''}`}>{resumen.totalAlertas}</div>
           </div>
         </div>
-
-        <div className="card stat-card">
-          <h3>Total Indicadores</h3>
-          <div className="stat-value">{resumen.totalIndicadores}</div>
-          <div className="stat-sub">metas activas en el periodo</div>
-        </div>
-
-        <div className="card stat-card">
-          <h3>En Alerta</h3>
-          <div className="stat-value" style={{ color: '#A9720F' }}>{resumen.totalAlertas}</div>
-          <div className="stat-sub">requieren seguimiento</div>
-        </div>
-
-        <div className="card stat-card">
-          <h3>Metas Críticas</h3>
-          <div className="stat-value critico">{resumen.totalCriticos}</div>
-          <div className="stat-sub">bajo el 75% del avance esperado</div>
+        <div className="campos-registro" style={{ borderTop: '1px solid var(--linea)' }}>
+          <div className="campo-registro" style={{ gridColumn: 'span 3' }}>
+            <div className="campo-etiqueta">Metas críticas — bajo el 75% del avance esperado a la fecha</div>
+            <div className={`campo-valor ${resumen.totalCriticos > 0 ? 'critico' : ''}`}>{resumen.totalCriticos}</div>
+          </div>
         </div>
       </div>
 

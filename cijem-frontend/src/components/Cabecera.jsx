@@ -5,15 +5,19 @@ import { useAuth } from '../context/useAuth';
 import { api } from '../api/client';
 
 function iniciales(nombre = '') {
-  return nombre
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((parte) => parte[0]?.toUpperCase())
-    .join('') || '??';
+  return (
+    nombre
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((parte) => parte[0]?.toUpperCase())
+      .join('') || '??'
+  );
 }
 
-const Topbar = () => {
+const fechaHoy = new Date().toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
+
+const Cabecera = () => {
   const { usuario, logout } = useAuth();
   const navigate = useNavigate();
   const [notificaciones, setNotificaciones] = useState([]);
@@ -47,12 +51,12 @@ const Topbar = () => {
   };
 
   return (
-    <header className="topbar">
-      <h2 className="topbar-title">CIJEM</h2>
-      <div className="topbar-actions">
+    <div className="letterhead">
+      <div className="letterhead-left">Unidad Regional JUNJI · {fechaHoy}</div>
+      <div className="letterhead-right">
         <div className="notif-wrapper" ref={contenedorRef}>
           <button className="icon-button" onClick={() => setAbierto((v) => !v)} aria-label="Notificaciones">
-            <Bell size={20} />
+            <Bell size={16} />
             {notificaciones.length > 0 && <span className="notif-badge">{notificaciones.length}</span>}
           </button>
           {abierto && (
@@ -70,19 +74,18 @@ const Topbar = () => {
             </div>
           )}
         </div>
+        <span className="letterhead-divider" />
         <div className="user-profile">
           <div className="avatar">{iniciales(usuario?.nombre)}</div>
-          <div className="user-info">
-            <span className="user-name">{usuario?.nombre || 'Usuario'}</span>
-            <span className="user-role">{usuario?.rol}</span>
-          </div>
-          <button className="icon-button" onClick={handleLogout} aria-label="Cerrar sesión" title="Cerrar sesión">
-            <LogOut size={18} />
-          </button>
+          <span className="user-name">{usuario?.nombre || 'Usuario'}</span>
+          <span className="user-role">{usuario?.rol}</span>
         </div>
+        <button className="icon-button" onClick={handleLogout} aria-label="Cerrar sesión" title="Cerrar sesión">
+          <LogOut size={15} />
+        </button>
       </div>
-    </header>
+    </div>
   );
 };
 
-export default Topbar;
+export default Cabecera;
