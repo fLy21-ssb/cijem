@@ -41,7 +41,7 @@ const Usuarios = () => {
       <h2 className="page-title">Gestión de Usuarios</h2>
 
       <div className="card" style={{ maxWidth: 560, marginBottom: 24 }}>
-        <h3 style={{ fontSize: 15, color: '#1A3668', marginBottom: 16 }}>Nuevo Usuario</h3>
+        <h3>Nuevo Usuario</h3>
         <form onSubmit={handleCrear}>
           <div className="form-row">
             <div className="form-group">
@@ -78,7 +78,7 @@ const Usuarios = () => {
       </div>
 
       <div className="card">
-        <h3 style={{ fontSize: 15, color: '#1A3668', marginBottom: 16 }}>Usuarios del Sistema</h3>
+        <h3>Usuarios del Sistema</h3>
         {cargando ? (
           <p>Cargando usuarios...</p>
         ) : error ? (

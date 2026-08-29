@@ -3,7 +3,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, PieCha
 import { api } from '../api/client';
 import EmptyState from '../components/EmptyState';
 
-const COLOR_ESTADO = { Verde: '#22A45D', Amarillo: '#F2B233', Rojo: '#E2483D' };
+const COLOR_ESTADO = { Verde: '#3C6E47', Amarillo: '#A9720F', Rojo: '#A6362B' };
+const TICK_MONO = { fontSize: 11, fontFamily: 'IBM Plex Mono, monospace', fill: '#4A5568' };
 
 const Inicio = () => {
   const [resumen, setResumen] = useState(null);
@@ -35,8 +36,8 @@ const Inicio = () => {
   }
 
   const datosDonut = [
-    { name: 'Cumplido', value: resumen.avanceGlobal, fill: '#2E5AAC' },
-    { name: 'Pendiente', value: Math.max(0, 100 - resumen.avanceGlobal), fill: '#EDF1FB' },
+    { name: 'Cumplido', value: resumen.avanceGlobal, fill: '#3B5978' },
+    { name: 'Pendiente', value: Math.max(0, 100 - resumen.avanceGlobal), fill: '#DDD7C4' },
   ];
 
   const datosGrafico = resumen.masAtrasados.map((ind) => ({
@@ -76,7 +77,7 @@ const Inicio = () => {
 
         <div className="card stat-card">
           <h3>En Alerta</h3>
-          <div className="stat-value" style={{ color: '#B8790C' }}>{resumen.totalAlertas}</div>
+          <div className="stat-value" style={{ color: '#A9720F' }}>{resumen.totalAlertas}</div>
           <div className="stat-sub">requieren seguimiento</div>
         </div>
 
@@ -89,21 +90,19 @@ const Inicio = () => {
 
       <div className="dashboard-main-grid">
         <div className="card">
-          <h3 style={{ fontSize: '14px', fontWeight: 700, color: '#1A3668', marginBottom: '16px' }}>
-            Top 5 Metas con Mayor Retraso
-          </h3>
+          <h3>Top 5 Metas con Mayor Retraso</h3>
           {datosGrafico.length === 0 ? (
             <EmptyState titulo="No hay suficientes datos para el gráfico" />
           ) : (
             <div style={{ width: '100%', height: 260 }}>
               <ResponsiveContainer>
                 <BarChart data={datosGrafico} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
-                  <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12 }} />
-                  <YAxis dataKey="nombre" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
-                  <Tooltip cursor={{ fill: '#F4F7FE' }} />
-                  <Bar dataKey="avance" radius={[0, 4, 4, 0]} barSize={20}>
+                  <XAxis type="number" domain={[0, 100]} tick={TICK_MONO} />
+                  <YAxis dataKey="nombre" type="category" axisLine={false} tickLine={false} tick={TICK_MONO} />
+                  <Tooltip cursor={{ fill: '#F2F3EE' }} contentStyle={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, border: '1px solid #16213A', borderRadius: 0 }} />
+                  <Bar dataKey="avance" radius={0} barSize={16}>
                     {datosGrafico.map((entry, i) => (
-                      <Cell key={i} fill={COLOR_ESTADO[entry.estado] || '#2E5AAC'} />
+                      <Cell key={i} fill={COLOR_ESTADO[entry.estado] || '#3B5978'} />
                     ))}
                   </Bar>
                 </BarChart>

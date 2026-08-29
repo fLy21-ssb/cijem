@@ -65,7 +65,7 @@ const Reportes = () => {
     <>
       <h2 className="page-title">Reportes</h2>
       <div className="card reportes-actions" style={{ maxWidth: 560 }}>
-        <p style={{ color: '#A3AED0', fontSize: 13 }}>
+        <p style={{ color: '#8A93A6', fontSize: 13 }}>
           Periodo: Enero – Diciembre 2026 · Informe ejecutivo de cumplimiento de todos los indicadores.
         </p>
 
@@ -78,7 +78,7 @@ const Reportes = () => {
           </button>
         </div>
 
-        <form onSubmit={handleEnviarEmail} style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #E0E5F2' }}>
+        <form onSubmit={handleEnviarEmail} style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid #CBC3AE' }}>
           <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Enviar por Email</label>
           <div className="email-form">
             <input

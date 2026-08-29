@@ -14,7 +14,7 @@ const Configuracion = () => {
     <>
       <h2 className="page-title">Configuración</h2>
       <div className="card" style={{ maxWidth: 480 }}>
-        <h3 style={{ borderBottom: '1px solid #E0E5F2', paddingBottom: 12, marginBottom: 20, color: '#1A3668', fontSize: 15 }}>
+        <h3 style={{ borderBottom: '1px solid var(--linea)', paddingBottom: 12 }}>
           Perfil de Usuario
         </h3>
         <div className="detalle-grid">

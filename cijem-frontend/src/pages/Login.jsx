@@ -33,8 +33,9 @@ const Login = () => {
       <div className="login-card">
         <div className="login-header">
           <img src={logoJunji} alt="Logo JUNJI" />
-          <h2>Iniciar Sesión</h2>
-          <p>CIJEM · Control de Gestión y Analítica de Datos</p>
+          <div className="login-eyebrow">Unidad Regional JUNJI · Registro de Acceso</div>
+          <h2>CIJEM</h2>
+          <p>Control de Gestión y Analítica de Datos</p>
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
