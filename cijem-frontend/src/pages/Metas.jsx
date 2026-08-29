@@ -32,6 +32,8 @@ const Metas = () => {
   const [errorModal, setErrorModal] = useState('');
 
   const [detalle, setDetalle] = useState(null);
+  const [proyeccion, setProyeccion] = useState(null);
+  const [cargandoProyeccion, setCargandoProyeccion] = useState(false);
 
   const cargarDatos = () => {
     api
@@ -42,6 +44,21 @@ const Metas = () => {
   };
 
   useEffect(() => { cargarDatos(); }, []);
+
+  useEffect(() => {
+    if (!detalle) return;
+    api
+      .proyeccionIndicador(detalle.id)
+      .then((data) => setProyeccion(data.data))
+      .catch(() => setProyeccion(null))
+      .finally(() => setCargandoProyeccion(false));
+  }, [detalle]);
+
+  const verDetalle = (ind) => {
+    setDetalle(ind);
+    setProyeccion(null);
+    setCargandoProyeccion(true);
+  };
 
   const indicadoresFiltrados = useMemo(() => {
     const texto = busqueda.trim().toLowerCase();
@@ -168,7 +185,7 @@ const Metas = () => {
                   <td><EstadoBadge estado={ind.estado} label={ind.estado_label} /></td>
                   <td>
                     <div className="row-actions">
-                      <button className="btn-link" onClick={() => setDetalle(ind)}>Ver</button>
+                      <button className="btn-link" onClick={() => verDetalle(ind)}>Ver</button>
                       <button className="btn-link" onClick={() => abrirModalEdicion(ind)}>Editar</button>
                       {esAdministrador && (
                         <button className="btn-link danger" onClick={() => handleEliminarMeta(ind)}>Eliminar</button>
@@ -290,6 +307,29 @@ const Metas = () => {
               <div className="detalle-item"><span>Periodo</span><strong>{detalle.fecha_inicio?.slice(0,10)} → {detalle.fecha_termino?.slice(0,10)}</strong></div>
               {detalle.descripcion && (
                 <div className="detalle-item" style={{ gridColumn: '1 / -1' }}><span>Descripción</span><strong>{detalle.descripcion}</strong></div>
+              )}
+            </div>
+
+            <div className="proyeccion-box">
+              <h4>Proyección de cierre — ¿llegaremos a la meta?</h4>
+              {cargandoProyeccion ? (
+                <p className="proyeccion-nota">Calculando tendencia...</p>
+              ) : !proyeccion?.suficienteHistorial ? (
+                <p className="proyeccion-nota">
+                  {proyeccion?.mensaje || 'Aún no hay suficiente historial de avances para proyectar una tendencia.'}
+                </p>
+              ) : (
+                <>
+                  <div className={`proyeccion-veredicto ${proyeccion.alcanzaMeta ? 'ok' : 'riesgo'}`}>
+                    {proyeccion.alcanzaMeta
+                      ? `Al ritmo actual, alcanzaría la meta antes del ${detalle.fecha_termino?.slice(0, 10)}.`
+                      : `Al ritmo actual, NO alcanzaría la meta para el ${detalle.fecha_termino?.slice(0, 10)}.`}
+                  </div>
+                  <div className="detalle-grid" style={{ marginTop: 14 }}>
+                    <div className="detalle-item"><span>Proyección al cierre</span><strong>{Math.round(proyeccion.proyeccionCierre)} {detalle.unidad_medida}</strong></div>
+                    <div className="detalle-item"><span>Ritmo diario estimado</span><strong>{proyeccion.pendienteDiaria.toFixed(2)} {detalle.unidad_medida}/día</strong></div>
+                  </div>
+                </>
               )}
             </div>
           </div>

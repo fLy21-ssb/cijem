@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import EmptyState from '../components/EmptyState';
 
 const COLOR_ESTADO = { Verde: '#3C6E47', Amarillo: '#A9720F', Rojo: '#A6362B' };
-const TICK_MONO = { fontSize: 11, fontFamily: 'IBM Plex Mono, monospace', fill: '#4A5568' };
+const TICK_MONO = { fontSize: 11, fontFamily: 'Public Sans, sans-serif', fill: '#4A5568' };
 const fechaHoy = new Date().toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
 const ReglaAvance = ({ valor }) => {
@@ -100,7 +100,7 @@ const Inicio = () => {
                 <BarChart data={datosGrafico} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                   <XAxis type="number" domain={[0, 100]} tick={TICK_MONO} />
                   <YAxis dataKey="nombre" type="category" axisLine={false} tickLine={false} tick={TICK_MONO} />
-                  <Tooltip cursor={{ fill: '#F2F3EE' }} contentStyle={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, border: '1px solid #16213A', borderRadius: 0 }} />
+                  <Tooltip cursor={{ fill: '#F2F3EE' }} contentStyle={{ fontFamily: 'Public Sans, sans-serif', fontSize: 12, border: '1px solid #16213A', borderRadius: 0 }} />
                   <Bar dataKey="avance" radius={0} barSize={16}>
                     {datosGrafico.map((entry, i) => (
                       <Cell key={i} fill={COLOR_ESTADO[entry.estado] || '#3B5978'} />

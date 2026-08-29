@@ -9,8 +9,11 @@
    Inicio no es una grilla de tarjetas: es una hoja de registro con
    campos tipeados, y el avance global se lee en una regla/cinta
    métrica, no en una dona. Toda la estructura de interfaz (pestañas,
-   encabezados, botones, folios, cifras) va en mono, como un
-   formulario de oficina pública; el texto de lectura va en serif.
+   encabezados, botones, folios, cifras) va en Public Sans mayúscula con
+   tracking (como un formulario tipeado); el texto de lectura va en PT
+   Serif — el par "Prensa Oficial": la misma tipografía del sistema de
+   diseño del gobierno de EE.UU. para lo estructural, sobria y de uso
+   real en sitios de gobierno.
    ===================================================================== */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -33,9 +36,11 @@
   --sello-rojo: #A6362B;
   --sello-rojo-bg: rgba(166, 54, 43, 0.08);
 
-  --font-mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
-  --font-serif: 'IBM Plex Serif', Georgia, serif;
-  --font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  /* --font-mono ya no es monoespaciada: es Public Sans con tracking,
+     usada para toda la estructura de interfaz (nav, headers, cifras). */
+  --font-mono: 'Public Sans', system-ui, sans-serif;
+  --font-serif: 'PT Serif', Georgia, serif;
+  --font-sans: 'Public Sans', system-ui, sans-serif;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -57,13 +62,15 @@ button, input, select { font-family: inherit; }
 .login-page {
   display: flex;
   min-height: 100vh;
+  padding: 20px;
   background:
     repeating-linear-gradient(180deg, transparent, transparent 34px, var(--linea-suave) 35px),
     var(--papel);
 }
 .login-card {
   margin: auto;
-  width: 420px;
+  width: 100%;
+  max-width: 420px;
   background: var(--papel-card);
   padding: 44px 40px;
   border: 1px solid var(--tinta);
@@ -184,6 +191,7 @@ button, input, select { font-family: inherit; }
 /* ---------- Cards & Grids ---------- */
 .card {
   background: var(--papel-card); border: 1px solid var(--linea); padding: 22px;
+  overflow-x: auto; /* las tablas anchas se desplazan adentro de la tarjeta, no la página entera */
 }
 .card > h3 {
   font-family: var(--font-mono); font-size: 12px; font-weight: 700; color: var(--tinta);
@@ -339,6 +347,19 @@ button, input, select { font-family: inherit; }
 }
 .detalle-item strong { font-size: 14px; color: var(--tinta); font-family: var(--font-mono); }
 
+.proyeccion-box { margin-top: 22px; padding-top: 18px; border-top: 1.5px dashed var(--linea); }
+.proyeccion-box h4 {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--tinta-suave); margin-bottom: 10px;
+}
+.proyeccion-nota { font-size: 13px; color: var(--tinta-tenue); font-family: var(--font-serif); }
+.proyeccion-veredicto {
+  font-size: 13px; font-weight: 600; padding: 10px 14px; border-left: 3px solid;
+  font-family: var(--font-mono);
+}
+.proyeccion-veredicto.ok { color: var(--sello-verde); background: var(--sello-verde-bg); border-color: var(--sello-verde); }
+.proyeccion-veredicto.riesgo { color: var(--sello-rojo); background: var(--sello-rojo-bg); border-color: var(--sello-rojo); }
+
 .form-group { margin-bottom: 15px; }
 .form-group label {
   display: block; font-size: 11px; font-weight: 600; margin-bottom: 6px; color: var(--tinta-suave);
@@ -379,12 +400,56 @@ button, input, select { font-family: inherit; }
 .status-msg.ok { background: var(--sello-verde-bg); color: var(--sello-verde); border-color: var(--sello-verde); }
 .status-msg.err { background: var(--sello-rojo-bg); color: var(--sello-rojo); border-color: var(--sello-rojo); }
 
+/* ---------- Responsivo ---------- */
 @media (max-width: 900px) {
-  .expediente-tabstrip { padding: 16px 16px 0; overflow-x: auto; }
+  .expediente-tabstrip {
+    padding: 14px 16px 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
   .expediente-brand span { display: none; }
+  .folder-tab { padding: 10px 16px 11px; flex-shrink: 0; }
   .expediente-body { padding: 20px; }
-  .letterhead { padding: 12px 20px; }
+  .letterhead { padding: 11px 20px; }
   .letterhead-left { display: none; }
+  .user-name, .user-role { display: none; }
+
+  .campos-registro { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-main-grid { grid-template-columns: 1fr; }
+
+  .table-toolbar { flex-direction: column; align-items: stretch; }
+  .filters-row { width: 100%; }
+  .search-input { width: 100%; }
+  .table-toolbar > .btn-primary { width: 100%; }
+
+  .form-row { flex-direction: column; gap: 0; }
+  .detalle-grid { grid-template-columns: 1fr; }
+
+  .email-form { flex-wrap: wrap; }
+  .email-form input { min-width: 100%; }
+}
+
+@media (max-width: 560px) {
+  .expediente-brand { margin-right: 16px; }
+  .letterhead-right { gap: 8px; }
+  .letterhead-divider { display: none; }
+  .avatar { width: 26px; height: 26px; font-size: 10px; }
+
+  .expediente-body { padding: 16px; }
+  .page-title { font-size: 19px; }
+
+  .hoja-registro-header { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .campos-registro { grid-template-columns: 1fr; }
+  .campo-registro { border-right: none !important; border-bottom: 1px solid var(--linea); }
+  .campo-registro:last-child { border-bottom: none; }
+  .campo-registro .campo-valor { font-size: 26px; }
+
+  .card { padding: 16px; }
+  .modal-content { padding: 20px; }
+  .modal-actions { flex-direction: column-reverse; }
+  .modal-actions .btn-primary, .modal-actions .btn-secondary { width: 100%; }
+
+  .row-actions { flex-wrap: wrap; justify-content: flex-start; gap: 10px; }
+  .stat-value { font-size: 26px; }
 }
 
 @media print {

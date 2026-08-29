@@ -52,7 +52,7 @@ const Auditoria = () => {
                   <td>{r.accion.replace('_', ' ')}</td>
                   <td>{r.tabla_afectada}</td>
                   <td>{r.registro_id ?? '-'}</td>
-                  <td style={{ maxWidth: 360, fontSize: 12, color: '#8A93A6', fontFamily: 'IBM Plex Mono, monospace' }}>
+                  <td style={{ maxWidth: 360, fontSize: 12, color: '#8A93A6', fontFamily: 'Public Sans, sans-serif' }}>
                     {typeof r.detalle === 'string' ? r.detalle : JSON.stringify(r.detalle)}
                   </td>
                 </tr>

@@ -107,7 +107,7 @@ const CargarDatos = () => {
         <div className="card" style={{ maxWidth: 640, margin: '20px auto' }}>
           <p><strong>{resultado.filasActualizadas}</strong> de <strong>{resultado.filasTotales}</strong> filas actualizaron un indicador existente.</p>
           {resultado.codigosNoEncontrados.length > 0 && (
-            <p style={{ marginTop: 8, color: '#A9720F', fontFamily: 'IBM Plex Mono, monospace', fontSize: 13 }}>
+            <p style={{ marginTop: 8, color: '#A9720F', fontFamily: 'Public Sans, sans-serif', fontSize: 13 }}>
               Códigos no encontrados: {resultado.codigosNoEncontrados.join(', ')}
             </p>
           )}

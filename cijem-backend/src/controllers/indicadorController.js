@@ -312,6 +312,20 @@ const proyeccionIndicador = async (req, res) => {
       y: Number(h.avance_acumulado),
     }));
 
+    // Si todos los registros caen dentro de un mismo día, la pendiente diaria
+    // no es representativa (un par de cargas seguidas en minutos puede dar una
+    // tasa "por día" absurda). Se exige al menos 1 día completo de separación.
+    const spanDias = puntos[puntos.length - 1].x - puntos[0].x;
+    if (spanDias < 1) {
+      return res.json({
+        exito: true,
+        data: {
+          suficienteHistorial: false,
+          mensaje: 'Los registros de avance disponibles son del mismo día. Se necesita historial repartido en al menos dos fechas distintas para proyectar una tendencia confiable.',
+        },
+      });
+    }
+
     const n = puntos.length;
     const sumaX = puntos.reduce((a, p) => a + p.x, 0);
     const sumaY = puntos.reduce((a, p) => a + p.y, 0);
